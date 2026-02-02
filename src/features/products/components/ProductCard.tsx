@@ -7,54 +7,72 @@ import { Heart } from "lucide-react";
 export function ProductCard({ product }: { product: Product }) {
   const navigate = useNavigate();
   const addToCart = useCartStore((s) => s.addToCart);
-  const handleBuyNow = () => {
-    addToCart(product);
-    navigate("/cart"); // ya /checkout agar hai
-  };
+
   const toggleWishlist = useWishlistStore((s) => s.toggleWishlist);
   const isWishlisted = useWishlistStore((s) => s.isWishlisted(product.id));
 
+  const handleBuyNow = () => {
+    addToCart(product);
+    navigate("/cart"); 
+  };
+
   return (
-    <div className="border rounded-lg p-3 hover:shadow transition relative">
-      <button
-        onClick={() => toggleWishlist(product)}
-        className="absolute top-3 right-3 z-10"
-      >
-        <Heart
-          size={22}
-          className={
-            isWishlisted ? "fill-red-500 text-red-500" : "text-gray-400"
-          }
-        />
-      </button>
-
-      <img
-        src={product.images?.[0] || "https://via.placeholder.com/300"}
-        onError={(e) => {
-          e.currentTarget.src =
-            "https://via.placeholder.com/300x300?text=No+Image";
-        }}
-        className="h-40 w-full object-cover rounded cursor-pointer"
+    <div className="group border rounded-xl bg-white overflow-hidden hover:shadow-lg transition">
+      
+      <div
+        className="relative h-48 bg-gray-100 cursor-pointer overflow-hidden"
         onClick={() => navigate(`/products/${product.id}`)}
-      />
+      >
+        <img
+          src={product.images?.[0] || "https://via.placeholder.com/300"}
+          onError={(e) => {
+            e.currentTarget.src =
+              "https://via.placeholder.com/300x300?text=No+Image";
+          }}
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
 
-      <h3 className="font-semibold mt-2">{product.title}</h3>
-      <p className="text-sm text-gray-500">${product.price}</p>
-
-      <div className="mt-4 flex gap-3">
+     
         <button
-          onClick={handleBuyNow}
-          className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md text-sm font-semibold transition"
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleWishlist(product);
+          }}
+          className="absolute top-3 right-3 bg-white p-1.5 rounded-full shadow"
         >
-          Buy Now
+          <Heart
+            size={18}
+            className={
+              isWishlisted ? "fill-red-500 text-red-500" : "text-gray-400"
+            }
+          />
         </button>
+      </div>
 
-        <button
-          onClick={() => addToCart(product)}
-          className="flex-1 border border-black hover:bg-black hover:text-white py-2 rounded-md text-sm font-semibold transition"
-        >
-          Add To Cart
-        </button>
+      
+      <div className="p-4">
+        <h3 className="text-sm font-semibold line-clamp-2 mb-1">
+          {product.title}
+        </h3>
+
+        <p className="text-base font-bold mb-3">${product.price}</p>
+
+        
+        <div className="flex gap-2">
+          <button
+            onClick={handleBuyNow}
+            className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md text-sm font-medium transition"
+          >
+            Buy Now
+          </button>
+
+          <button
+            onClick={() => addToCart(product)}
+            className="flex-1 border border-gray-300 hover:bg-black hover:text-white py-2 rounded-md text-sm font-medium transition"
+          >
+            Add To Cart
+          </button>
+        </div>
       </div>
     </div>
   );
