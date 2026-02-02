@@ -11,8 +11,8 @@ import WishlistPage from "@/features/wishlist/pages/WishlistPage";
 export default function AppRouter() {
   return (
     <Routes>
-       {/* Root redirect */}
-     <Route path="/" element={<Navigate to="/products" replace />} />
+      {/* Root redirect */}
+      <Route path="/" element={<Navigate to="/products" replace />} />
       <Route path="/auth/login" element={<LoginPage />} />
       <Route path="/auth/signup" element={<SignupPage />} />
       <Route element={<ProtectedRoutes />}>
@@ -20,7 +20,7 @@ export default function AppRouter() {
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/cart" element={<CartPage />} />
-           <Route path="/wishlist" element={<WishlistPage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
         </Route>
       </Route>
     </Routes>

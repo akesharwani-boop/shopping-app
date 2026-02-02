@@ -19,6 +19,7 @@ export type ProductsParams = {
   categoryId?: number;
   price_min?: number;
   price_max?: number;
+  price ?:number;
   offset?: number;
   limit?: number;
 };

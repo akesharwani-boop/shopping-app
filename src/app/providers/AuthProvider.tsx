@@ -1,8 +1,8 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { storageService } from "@/services/storage.service";
 
 type AuthContextType = {
-  isAuthenticated: Boolean;
+  isAuthenticated: boolean
   logout: () => void;
 };
 
@@ -16,9 +16,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsAuthenticated(false);
     window.location.href = "/auth/login";
   };
-  useEffect(() => {
-    setIsAuthenticated(!!storageService.getAccessToken());
-  }, []);
+//   useEffect(() => {
+//   const token = storageService.getAccessToken();
+//   setIsAuthenticated(!!token);
+// }, []);
   return (
     <AuthContext.Provider value={{ isAuthenticated, logout }}>
       {children}
@@ -26,6 +27,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useAuth must be used within AuthProvider");

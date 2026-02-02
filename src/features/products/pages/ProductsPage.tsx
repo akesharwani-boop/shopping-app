@@ -9,12 +9,18 @@ export default function ProductsPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<number | null>(null);
   const [page, setPage] = useState(0);
+  const[price,setPrice] = useState("")
+  const[priceMin,setPriceMin] =useState("")
+  const[priceMax,setPriceMax] = useState("")
 
   const debouncedSearch = useDebounce(search);
 
   const { data, isLoading } = useProductsQuery({
     title: debouncedSearch || undefined,
     categoryId: category || undefined,
+    price: price ? Number(price) : undefined,
+    price_min: priceMin ? Number(priceMin) : undefined, 
+    price_max: priceMax ? Number(priceMax) : undefined, 
     offset: page * 10,
     limit: 10,
   });
@@ -29,6 +35,12 @@ export default function ProductsPage() {
         setSearch={setSearch}
         category={category}
         setCategory={setCategory}
+        price={price}
+        setPrice={setPrice}
+        priceMin={priceMin}
+        setPriceMin={setPriceMin}
+        priceMax={priceMax}
+        setPriceMax={setPriceMax}
       />
 
       <div className="grid grid-cols-4 gap-6 mt-6">

@@ -41,7 +41,7 @@ export default function ProductDetailsPage() {
 
         <Button
           onClick={() => {
-            addToCart(product); // ✅ ONLY product
+            addToCart(product); 
             toast.success("Added to cart 🛒");
           }}
         >
