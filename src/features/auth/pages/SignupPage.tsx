@@ -1,42 +1,4 @@
-// import { useFormik } from "formik";
-// import { signupSchema } from "../validation/auth.schema";
-// import { useSignupMutation } from "../hooks/useAuthMutations";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
 
-// export default function SignupPage() {
-//   const signupMutation = useSignupMutation();
-
-//   const formik = useFormik({
-//     initialValues: { name: "", email: "", password: "" },
-//     validationSchema: signupSchema,
-//     onSubmit: (values) =>
-//   signupMutation.mutate({
-//     ...values,
-//     avatar: "https://i.pravatar.cc/150",
-//   })
-//   });
-
-//   return (
-//     <form
-//       onSubmit={formik.handleSubmit}
-//       className="max-w-md mx-auto space-y-4"
-//     >
-//       <Input name="name" placeholder="Name" onChange={formik.handleChange} />
-//       <Input name="email" placeholder="Email" onChange={formik.handleChange} />
-//       <Input
-//         type="password"
-//         name="password"
-//         placeholder="Password"
-//         onChange={formik.handleChange}
-//       />
-
-//       <Button type="submit" disabled={signupMutation.isPending}>
-//         Sign Up
-//       </Button>
-//     </form>
-//   );
-// }
 import { useFormik } from "formik";
 import { signupSchema } from "../validation/auth.schema";
 import { useSignupMutation } from "../hooks/useAuthMutations";
@@ -70,7 +32,7 @@ export default function SignupPage() {
       <p className="text-white/80 text-center mb-6">Join us & start shopping</p>
 
       <form onSubmit={formik.handleSubmit} className="space-y-5">
-        {/* 👤 Name */}
+        {/*  Name */}
         <div>
           <label className="text-sm text-white/80">Name</label>
           <Input
@@ -86,7 +48,7 @@ export default function SignupPage() {
           )}
         </div>
 
-        {/* 📧 Email */}
+        {/*  Email */}
         <div>
           <label className="text-sm text-white/80">Email</label>
           <Input
@@ -103,7 +65,7 @@ export default function SignupPage() {
           )}
         </div>
 
-        {/* 🔒 Password */}
+        {/*  Password */}
         <div>
           <label className="text-sm text-white/80">Password</label>
           <Input
@@ -122,7 +84,7 @@ export default function SignupPage() {
           )}
         </div>
 
-        {/* 🚀 Submit */}
+        {/*  Submit */}
         <Button
           type="submit"
           disabled={signupMutation.isPending}
@@ -130,7 +92,7 @@ export default function SignupPage() {
           {signupMutation.isPending ? "Creating account..." : "Sign Up"}
         </Button>
 
-        {/* ❌ API Error */}
+        {/*  API Error */}
         {signupMutation.isError && (
           <p className="text-center text-red-300 text-sm">
             Signup failed. Email may already exist.

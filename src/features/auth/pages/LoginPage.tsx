@@ -1,43 +1,4 @@
-// import { useFormik } from "formik";
-// import { loginSchema } from "../validation/auth.schema";
-// import { useLoginMutation } from "../hooks/useAuthMutations";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
 
-// export default function LoginPage() {
-//   const loginMutation = useLoginMutation();
-//   const formik = useFormik({
-//     initialValues: { email: " ", password: " " },
-//     validationSchema: loginSchema,
-//     onSubmit: (values) => loginMutation.mutate(values),
-//   });
-//   return (
-//     <form onSubmit={formik.handleSubmit} className="max-w-md mx-auto space-y-4">
-//       <Input
-//         name="email"
-//         placeholder="Email"
-//         onChange={formik.handleChange}
-//         value={formik.values.email}
-//       />
-//       {formik.touched.email && formik.errors.email && (
-//         <p className="text-sm text-red-500">{formik.errors.email}</p>
-//       )}
-//       <Input
-//         type="password"
-//         name="password"
-//         placeholder="Password"
-//         onChange={formik.handleChange}
-//         value={formik.values.password}
-//       />
-//       {formik.touched.password && formik.errors.password && (
-//         <p className="text-sm text-red-500">{formik.errors.password}</p>
-//       )}
-//       <Button type="submit" disabled={loginMutation.isPending}>
-//         Login
-//       </Button>
-//     </form>
-//   );
-// }
 import { useFormik } from "formik";
 import { loginSchema } from "../validation/auth.schema";
 import { useLoginMutation } from "../hooks/useAuthMutations";
@@ -69,7 +30,7 @@ export default function LoginPage() {
       </p>
 
       <form onSubmit={formik.handleSubmit} className="space-y-5">
-        {/* 📧 Email */}
+      
         <div>
           <label className="text-sm text-white/80">Email</label>
           <Input
@@ -86,7 +47,7 @@ export default function LoginPage() {
           )}
         </div>
 
-        {/* 🔒 Password */}
+      
         <div>
           <label className="text-sm text-white/80">Password</label>
           <Input
@@ -105,7 +66,7 @@ export default function LoginPage() {
           )}
         </div>
 
-        {/* 🚀 Submit */}
+       
         <Button
           type="submit"
           disabled={loginMutation.isPending}
@@ -113,7 +74,7 @@ export default function LoginPage() {
           {loginMutation.isPending ? "Logging in..." : "Login"}
         </Button>
 
-        {/* ❌ API Error */}
+       
         {loginMutation.isError && (
           <p className="text-center text-red-300 text-sm">
             Invalid email or password
