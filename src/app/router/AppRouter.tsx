@@ -8,6 +8,10 @@ import ProductsPage from "@/features/products/pages/ProductsPage";
 import { Navigate } from "react-router-dom";
 import CartPage from "@/features/cart/pages/CartPage";
 import WishlistPage from "@/features/wishlist/pages/WishlistPage";
+import { AdminRoute } from "@/routes/ProtectedRoute";
+import AdminDashboard from "@/features/admin/pages/AdminDashboard";
+import AdminLayout from "@/components/layout/AdminLayout";
+import AdminUsersPage from "@/features/admin/pages/AdminUsersPage";
 export default function AppRouter() {
   return (
     <Routes>
@@ -21,6 +25,17 @@ export default function AppRouter() {
           <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminLayout />
+              </AdminRoute>
+            }
+          >
+            <Route index element={<AdminDashboard />} />
+            <Route path="users" element={<AdminUsersPage />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

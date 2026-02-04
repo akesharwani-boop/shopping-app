@@ -1,4 +1,3 @@
-
 import { useMutation } from "@tanstack/react-query";
 import { authApi } from "../api/auth.api";
 import { storageService } from "@/services/storage.service";
@@ -16,25 +15,24 @@ export const useLoginMutation = () => {
 
     onSuccess: async (data) => {
       try {
-        // 1️⃣ Tokens save
-        storageService.setTokens(
-          data.access_token,
-          data.refresh_token
-        );
+        // 1️ Tokens save
+        storageService.setTokens(data.access_token, data.refresh_token);
 
-        // 2️⃣ Profile API call
+        // 2️ Profile API call
         const profile = await authApi.profile();
 
-        // 3️⃣ User store me save
+        // 3️ User store me save
         setUser({
+          id: profile.id,
           name: profile.name,
           email: profile.email,
-          avatar: profile.avatar ?? "",
+          role: profile.role,
+          avatar: profile.avatar,
         });
 
         toast.success("Logged in successfully");
         navigate("/products");
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         toast.error("Failed to load profile");
       }

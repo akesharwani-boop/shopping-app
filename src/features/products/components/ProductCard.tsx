@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useCartStore } from "@/features/cart/store/useCartStore";
 import { useWishlistStore } from "@/features/wishlist/store/useWishlistStore";
 import { Heart } from "lucide-react";
+import { useAuthStore } from "@/features/auth/store/useAuthStore";
+import { Button } from "@/components/ui/button";
 
 export function ProductCard({ product }: { product: Product }) {
   const navigate = useNavigate();
@@ -10,15 +12,15 @@ export function ProductCard({ product }: { product: Product }) {
 
   const toggleWishlist = useWishlistStore((s) => s.toggleWishlist);
   const isWishlisted = useWishlistStore((s) => s.isWishlisted(product.id));
+  const user = useAuthStore((s) => s.user);
 
   const handleBuyNow = () => {
     addToCart(product);
-    navigate("/cart"); 
+    navigate("/cart");
   };
 
   return (
     <div className="group border rounded-xl bg-white overflow-hidden hover:shadow-lg transition">
-      
       <div
         className="relative h-48 bg-gray-100 cursor-pointer overflow-hidden"
         onClick={() => navigate(`/products/${product.id}`)}
@@ -32,7 +34,6 @@ export function ProductCard({ product }: { product: Product }) {
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
 
-     
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -49,7 +50,6 @@ export function ProductCard({ product }: { product: Product }) {
         </button>
       </div>
 
-      
       <div className="p-4">
         <h3 className="text-sm font-semibold line-clamp-2 mb-1">
           {product.title}
@@ -57,7 +57,6 @@ export function ProductCard({ product }: { product: Product }) {
 
         <p className="text-base font-bold mb-3">${product.price}</p>
 
-        
         <div className="flex gap-2">
           <button
             onClick={handleBuyNow}
@@ -72,6 +71,15 @@ export function ProductCard({ product }: { product: Product }) {
           >
             Add To Cart
           </button>
+          {/* 🔒 ADMIN / SUPERADMIN ONLY */}
+          {(user?.role === "admin" || user?.role === "superadmin") && (
+            <div className="flex gap-2 mt-3">
+              <Button size="sm">Edit</Button>
+              <Button size="sm" variant="destructive">
+                Delete
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>

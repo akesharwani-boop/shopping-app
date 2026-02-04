@@ -1,8 +1,12 @@
 import { create } from "zustand";
 
+type Role ='customer' |'admin' | 'superadmin'
+
 type User = {
+  id:number
   name: string;
   email: string;
+  role: Role
   avatar?: string;
 };
 
