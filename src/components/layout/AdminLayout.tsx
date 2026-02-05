@@ -6,7 +6,7 @@ import AdminSidebar from "@/features/admin/components/AdminSidebar";
 export default function AdminLayout() {
   const user = useAuthStore((s) => s.user);
 
-  // 🔒 safety
+  //  safety
   if (!user || (user.role !== "admin" && user.role !== "superadmin")) {
     return null;
   }

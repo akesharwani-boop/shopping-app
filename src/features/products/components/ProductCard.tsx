@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useCartStore } from "@/features/cart/store/useCartStore";
 import { useWishlistStore } from "@/features/wishlist/store/useWishlistStore";
 import { Heart } from "lucide-react";
-import { useAuthStore } from "@/features/auth/store/useAuthStore";
-import { Button } from "@/components/ui/button";
 
 export function ProductCard({ product }: { product: Product }) {
   const navigate = useNavigate();
@@ -12,7 +10,7 @@ export function ProductCard({ product }: { product: Product }) {
 
   const toggleWishlist = useWishlistStore((s) => s.toggleWishlist);
   const isWishlisted = useWishlistStore((s) => s.isWishlisted(product.id));
-  const user = useAuthStore((s) => s.user);
+  
 
   const handleBuyNow = () => {
     addToCart(product);
@@ -71,15 +69,8 @@ export function ProductCard({ product }: { product: Product }) {
           >
             Add To Cart
           </button>
-          {/* 🔒 ADMIN / SUPERADMIN ONLY */}
-          {(user?.role === "admin" || user?.role === "superadmin") && (
-            <div className="flex gap-2 mt-3">
-              <Button size="sm">Edit</Button>
-              <Button size="sm" variant="destructive">
-                Delete
-              </Button>
-            </div>
-          )}
+          {/*  ADMIN / SUPERADMIN ONLY */}
+       
         </div>
       </div>
     </div>

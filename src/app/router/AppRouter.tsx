@@ -12,6 +12,7 @@ import { AdminRoute } from "@/routes/ProtectedRoute";
 import AdminDashboard from "@/features/admin/pages/AdminDashboard";
 import AdminLayout from "@/components/layout/AdminLayout";
 import AdminUsersPage from "@/features/admin/pages/AdminUsersPage";
+import AdminProductsPage from "@/features/admin/pages/AdminProductsPage";
 export default function AppRouter() {
   return (
     <Routes>
@@ -35,6 +36,7 @@ export default function AppRouter() {
           >
             <Route index element={<AdminDashboard />} />
             <Route path="users" element={<AdminUsersPage />} />
+             <Route path="products" element={<AdminProductsPage />} />
           </Route>
         </Route>
       </Route>
