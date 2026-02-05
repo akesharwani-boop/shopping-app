@@ -1,5 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Heart, ShoppingCart, User } from "lucide-react";
+import { Link, useNavigate,NavLink } from "react-router-dom";
+import { Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { storageService } from "@/services/storage.service";
 import { useWishlistStore } from "@/features/wishlist/store/useWishlistStore";
@@ -25,40 +25,41 @@ export function Header() {
     <header className="flex items-center justify-between px-6 py-4 border-b bg-white">
       
       {/* LEFT SIDE: PROFILE */}
-      {user && (
-        <div className="flex items-center gap-3 relative group cursor-pointer">
-          <User className="w-6 h-6 text-gray-700" />
+     {user && (
+  <div className="relative group cursor-pointer flex items-center gap-2">
+    <img
+      src={user.avatar}
+      alt={user.name}
+      className="w-9 h-9 rounded-full object-cover border"
+    />
 
-          <span className="text-sm font-medium">
-            {user.name}
-          </span>
+    <span className="text-sm font-medium">{user.name}</span>
 
-          {/*  DROPDOWN */}
-          <div className="absolute left-0 top-full mt-2 hidden group-hover:block
-                          bg-white border rounded shadow w-44 z-50">
-            
-            <div className="px-3 py-2 text-xs text-gray-500 border-b">
-              Role: {user.role.toUpperCase()}
-            </div>
+    {/* dropdown */}
+    <div className="absolute top-full left-0 mt-2 hidden group-hover:block
+                    bg-white border rounded shadow w-40 z-50">
+      <p className="px-3 py-2 text-xs text-gray-500">
+        Role: {user.role.toUpperCase()}
+      </p>
 
-            {(user.role === "admin" || user.role === "superadmin") && (
-              <Link
-                to="/admin"
-                className="block px-3 py-2 hover:bg-gray-100 text-sm"
-              >
-                Admin Panel
-              </Link>
-            )}
-
-            <button
-              onClick={logout}
-              className="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
+      {(user.role === "admin" || user.role === "superadmin") && (
+        <NavLink
+          to="/admin/users"
+          className="block px-3 py-2 hover:bg-gray-100"
+        >
+          Admin Panel
+        </NavLink>
       )}
+
+      <button
+        onClick={logout}
+        className="w-full text-left px-3 py-2 hover:bg-gray-100"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+)}
 
       {/* RIGHT SIDE: ICONS */}
       <div className="flex items-center gap-6">
