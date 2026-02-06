@@ -19,6 +19,12 @@ export default function AdminSidebar() {
         >
           Manage Products
         </NavLink>
+         <NavLink
+          to="/admin/categories"
+          className="px-3 py-2 rounded hover:bg-gray-100"
+        >
+          Manage Categories
+        </NavLink>
       </nav>
     </aside>
   );
