@@ -12,18 +12,28 @@ export default function CreateUserModal({ onClose, onSuccess }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("customer");
+  const [error, setError] = useState("");
 
   const createUser = async () => {
-    await axios.post("https://api.escuelajs.co/api/v1/users", {
-      name,
-      email,
-      password,
-      role,
-      avatar: "https://picsum.photos/200",
-    });
+    if (!name || !email || !password || !role) {
+      setError("All fields are required");
+      return;
+    }
 
-    onSuccess();
-    onClose();
+    try {
+      await axios.post("https://api.escuelajs.co/api/v1/users", {
+        name,
+        email,
+        password,
+        role,
+        avatar: "https://picsum.photos/200",
+      });
+
+      onSuccess();
+      onClose();
+    } catch {
+      setError("Failed to create user");
+    }
   };
 
   return (
@@ -31,16 +41,27 @@ export default function CreateUserModal({ onClose, onSuccess }: Props) {
       <div className="bg-white p-6 rounded w-96">
         <h2 className="text-lg font-bold mb-4">Create User</h2>
 
+   
+        {error && (
+          <div className="mb-3 rounded bg-red-100 border border-red-300 px-3 py-2 text-sm text-red-700">
+            {error}
+          </div>
+        )}
+
         <input
           placeholder="Name"
-          className="border p-2 w-full mb-2"
+          className={`border p-2 w-full mb-2 ${
+            error && !name ? "border-red-500" : ""
+          }`}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
 
         <input
           placeholder="Email"
-          className="border p-2 w-full mb-2"
+          className={`border p-2 w-full mb-2 ${
+            error && !email ? "border-red-500" : ""
+          }`}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -48,7 +69,9 @@ export default function CreateUserModal({ onClose, onSuccess }: Props) {
         <input
           placeholder="Password"
           type="password"
-          className="border p-2 w-full mb-2"
+          className={`border p-2 w-full mb-2 ${
+            error && !password ? "border-red-500" : ""
+          }`}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />

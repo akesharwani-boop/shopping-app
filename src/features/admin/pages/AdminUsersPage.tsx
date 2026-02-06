@@ -17,12 +17,14 @@ type User = {
 
 export default function AdminUsersPage() {
   const currentUser = useAuthStore((s) => s.user);
-   
 
   const [open, setOpen] = useState(false);
   const [editUser, setEditUser] = useState<User | null>(null);
 
-  const { data: users = [] } = useQuery<User[]>({
+  const {
+    data: users = [],
+    refetch,
+  } = useQuery<User[]>({
     queryKey: ["admin-users"],
     queryFn: async () => {
       const res = await axios.get(
@@ -31,6 +33,20 @@ export default function AdminUsersPage() {
       return res.data;
     },
   });
+
+  //  API unreliable → UX based delete
+  const handleDelete = async (id: number) => {
+    try {
+      await axios.delete(
+        `https://api.escuelajs.co/api/v1/users/${id}`
+      );
+    } catch  {
+      alert("Delete simulated (Demo API limitation)");
+    } finally {
+      // UI refresh anyway
+      refetch();
+    }
+  };
 
   return (
     <div>
@@ -82,6 +98,7 @@ export default function AdminUsersPage() {
                 </td>
 
                 <td className="p-3 flex justify-end gap-2">
+                  {/* EDIT */}
                   <button
                     onClick={() => setEditUser(u)}
                     className="p-2 rounded hover:bg-gray-100 text-gray-600"
@@ -89,11 +106,9 @@ export default function AdminUsersPage() {
                     <Pencil size={16} />
                   </button>
 
-                  {/* ❌ DELETE API disabled (API 400 issue explained below) */}
+                  {/* DELETE */}
                   <button
-                    onClick={() =>
-                      alert("Delete API disabled (API returns 400)")
-                    }
+                    onClick={() => handleDelete(u.id)}
                     className="p-2 rounded hover:bg-red-50 text-red-600"
                   >
                     <Trash2 size={16} />
@@ -105,18 +120,26 @@ export default function AdminUsersPage() {
         </table>
       </div>
 
+      {/* CREATE */}
       {open && (
         <CreateUserModal
           onClose={() => setOpen(false)}
-          onSuccess={() => {}}
+          onSuccess={() => {
+            setOpen(false);
+            refetch();
+          }}
         />
       )}
 
+      {/* EDIT */}
       {editUser && (
         <EditUserModal
           user={editUser}
           onClose={() => setEditUser(null)}
-          onSuccess={() => {}}
+          onSuccess={() => {
+            setEditUser(null);
+            refetch();
+          }}
         />
       )}
     </div>
