@@ -1,7 +1,12 @@
 import axios from "axios";
 import { storageService } from "./storage.service";
-
+import type { AxiosRequestConfig,AxiosError } from "axios";
 const BASE_URL = "https://api.escuelajs.co/api/v1";
+
+type FailedQueueItem = {
+  resolve: (token: string | null) => void;
+  reject: (error: unknown) => void;
+};
 
 export const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -21,9 +26,16 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 let isRefreshing = false;
-let failedQueue: any[] = [];
+let failedQueue: FailedQueueItem[] = [];
 
-const processQueue = (error: unknown, token: string | null = null) => {
+type RetryAxiosRequestConfig = AxiosRequestConfig & {
+  _retry?: boolean;
+};
+
+const processQueue = (
+  error: unknown,
+  token: string | null = null
+) => {
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
@@ -37,15 +49,20 @@ const processQueue = (error: unknown, token: string | null = null) => {
 
 axiosInstance.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    const originalRequest = error.config as any;
+  async (error: AxiosError) => {
+    const originalRequest = error.config as RetryAxiosRequestConfig;
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        return new Promise((resolve, reject) => {
+        return new Promise<string | null>((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         }).then((token) => {
-          originalRequest.headers.Authorization = `Bearer ${token}`;
+          if (token) {
+            originalRequest.headers = {
+              ...originalRequest.headers,
+              Authorization: `Bearer ${token}`,
+            };
+          }
           return axiosInstance(originalRequest);
         });
       }
@@ -70,8 +87,9 @@ axiosInstance.interceptors.response.use(
 
         storageService.setTokens(access_token, refresh_token);
 
-        axiosInstance.defaults.headers.common["Authorization"] =
-          `Bearer ${access_token}`;
+        axiosInstance.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${access_token}`;
 
         processQueue(null, access_token);
 
@@ -87,5 +105,5 @@ axiosInstance.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
