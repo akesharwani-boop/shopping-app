@@ -1,0 +1,95 @@
+
+import { useFormik } from "formik";
+import { loginSchema } from "../validation/auth.schema";
+import { useLoginMutation } from "../hooks/useAuthMutations";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import AuthLayout from "../components/AuthLayout";
+import { Link } from "react-router-dom";
+export default function LoginPage() {
+  const loginMutation = useLoginMutation();
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit: (values) => {
+      loginMutation.mutate(values);
+    },
+  });
+
+  return (
+    <AuthLayout>
+      <h2 className="text-3xl font-bold text-white text-center mb-2">
+        Welcome Back 👋
+      </h2>
+      <p className="text-white/80 text-center mb-6">
+        Login to continue shopping
+      </p>
+
+      <form onSubmit={formik.handleSubmit} className="space-y-5">
+      
+        <div>
+          <label className="text-sm text-white/80">Email</label>
+          <Input
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className="mt-1 bg-white/30 border-white/20 text-white placeholder:text-white/60"
+          />
+          {formik.touched.email && formik.errors.email && (
+            <p className="text-red-300 text-xs mt-1">{formik.errors.email}</p>
+          )}
+        </div>
+
+      
+        <div>
+          <label className="text-sm text-white/80">Password</label>
+          <Input
+            name="password"
+            type="password"
+            placeholder="••••••••"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className="mt-1 bg-white/30 border-white/20 text-white"
+          />
+          {formik.touched.password && formik.errors.password && (
+            <p className="text-red-300 text-xs mt-1">
+              {formik.errors.password}
+            </p>
+          )}
+        </div>
+
+       
+        <Button
+          type="submit"
+          disabled={loginMutation.isPending}
+          className="w-full bg-black/80 hover:bg-black text-white">
+          {loginMutation.isPending ? "Logging in..." : "Login"}
+        </Button>
+
+       
+        {loginMutation.isError && (
+          <p className="text-center text-red-300 text-sm">
+            Invalid email or password
+          </p>
+        )}
+
+        <p className="text-center text-white/70 text-sm">
+          Don’t have an account?{" "}
+          <Link
+            to="/auth/signup"
+            className="underline text-white hover:text-white/90">
+            Sign up
+          </Link>
+        </p>
+      </form>
+    </AuthLayout>
+  );
+}
